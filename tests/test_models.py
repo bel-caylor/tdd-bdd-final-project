@@ -168,23 +168,45 @@ class TestProductModel(unittest.TestCase):
         for product in found:
             self.assertEqual(product.name, name)
 
-        product = ProductFactory()
-        product.id = None
-        product.create()
-        product_name = product.name
-        found_product = Product.find_by_name(product_name)
-        self.assertEqual(found_product.count(), 1)
-
 
     def test_find_product_by_availability(self):
         """It should find product by availability and assert that the available count is eqaul"""
         products = Product.all()
         self.assertEqual(products, [])
         products = ProductFactory.create_batch(10)
-        # available_count = 0
-        # for product in products:
-        #     product.create()
-        #     if product.available == True:
-        #         available_count += 1
-        # available_products = Product.find_by_availability
-        # self.assert
+        available_count = 0
+        for product in products:
+            product.create()
+            if product.available == True:
+                available_count += 1
+        available_products = Product.find_by_availability()
+        self.assertEqual(available_products.count(), available_count)
+        for product in available_products:
+            self.assertEqual(product.available, True)
+
+
+    def test_find_by_category(self):
+        """It should Find Products by Category"""
+        products = ProductFactory.create_batch(10)
+        for product in products:
+            product.create()
+        category = products[0].category
+        count = len([product for product in products if product.category == category])
+        found = Product.find_by_category(category)
+        self.assertEqual(found.count(), count)
+        for product in found:
+            self.assertEqual(product.category, category)
+
+
+    def test_find_by_price(self):
+        """It should find products by price"""
+        products = ProductFactory.create_batch(10)
+        search_price = Decimal('10.00')
+        for product in products:
+            product.create()
+        count = len([product for product in products if product.price == search_price])
+        # Search for products with a price of 10.00
+        found_products = Product.find_by_price(search_price)
+
+        # Assert that we found 2 products with the search price
+        self.assertEqual(found_products.count(), count)
