@@ -131,7 +131,6 @@ class TestProductModel(unittest.TestCase):
         result = Product.find(product.id)
         self.assertEqual(result.name, product.name)
 
-
     def test_delete_a_product(self):
         """It should delete a product and assert that it is deleted"""
         products = Product.all()
@@ -151,7 +150,7 @@ class TestProductModel(unittest.TestCase):
             product = ProductFactory()
             product.id = None
             product.create()
-        self.assertEqual(len(product.all()), 5)  
+        self.assertEqual(len(product.all()), 5)
 
     def test_find_product_by_name(self):
         """It should find product by name"""
@@ -168,7 +167,6 @@ class TestProductModel(unittest.TestCase):
         for product in found:
             self.assertEqual(product.name, name)
 
-
     def test_find_product_by_availability(self):
         """It should find product by availability and assert that the available count is eqaul"""
         products = Product.all()
@@ -177,13 +175,12 @@ class TestProductModel(unittest.TestCase):
         available_count = 0
         for product in products:
             product.create()
-            if product.available == True:
+            if product.available:
                 available_count += 1
         available_products = Product.find_by_availability()
         self.assertEqual(available_products.count(), available_count)
         for product in available_products:
             self.assertEqual(product.available, True)
-
 
     def test_find_by_category(self):
         """It should Find Products by Category"""
@@ -196,7 +193,6 @@ class TestProductModel(unittest.TestCase):
         self.assertEqual(found.count(), count)
         for product in found:
             self.assertEqual(product.category, category)
-
 
     def test_find_by_price(self):
         """It should find products by price"""
